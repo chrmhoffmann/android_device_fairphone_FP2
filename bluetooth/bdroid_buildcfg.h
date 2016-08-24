@@ -20,6 +20,9 @@
 #define BLUETOOTH_QTI_SW TRUE
 
 #define BTM_DEF_LOCAL_NAME   "Fairphone FP2"
+
+/* Defined if the kernel does not have support for CLOCK_BOOTTIME_ALARM */
+#define KERNEL_MISSING_CLOCK_BOOTTIME_ALARM TRUE
 // Disables read remote device feature
 #define BTA_SKIP_BLE_READ_REMOTE_FEAT FALSE
 #define MAX_L2CAP_CHANNELS    16
