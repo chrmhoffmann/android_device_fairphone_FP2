@@ -7,15 +7,23 @@ ifeq ($(TARGET_ARCH),)
 TARGET_ARCH := arm
 endif
 TARGET_KERNEL_ARCH := arm
-BOARD_USES_GENERIC_AUDIO := true
+
+BOARD_USES_ALSA_AUDIO := true
+AUDIO_FEATURE_ENABLED_HWDEP_CAL := true
+AUDIO_FEATURE_ENABLED_LOW_LATENCY_CAPTURE := true
+AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
+AUDIO_FEATURE_ENABLED_NEW_SAMPLE_RATE := true
+AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
+AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := false
+USE_CUSTOM_AUDIO_POLICY := 1
+
 USE_CAMERA_STUB := false
 
-TARGET_USES_AOSP := false
-# Compile with msm kernel
-TARGET_COMPILE_WITH_MSM_KERNEL := true
-TARGET_HAS_QC_KERNEL_SOURCE := true
+TARGET_KERNEL_CONFIG := fairphone-perf_defconfig
+TARGET_KERNEL_SOURCE := kernel/fairphone/msm8974
+TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
 
--include $(QCPATH)/common/msm8974/BoardConfigVendor.mk
+-include vendor/fairphone/FP2/BoardConfigVendor.mk
 
 #TODO: Fix-me: Setting TARGET_HAVE_HDMI_OUT to false
 # to get rid of compilation error.
@@ -37,6 +45,8 @@ TARGET_CPU_SMP := true
 ARCH_ARM_HAVE_TLS_REGISTER := true
 
 TARGET_HARDWARE_3D := false
+
+BOARD_USES_QCOM_HARDWARE := true
 TARGET_BOARD_PLATFORM := msm8974
 TARGET_BOOTLOADER_BOARD_NAME := FP2 
 
@@ -58,21 +68,17 @@ MAX_EGL_CACHE_KEY_SIZE := 12*1024
 # of the device.
 MAX_EGL_CACHE_SIZE := 2048*1024
 
-# Use signed boot and recovery image
-TARGET_BOOTIMG_SIGNED := true
-
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 
 ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3b7 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3b7 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1 
 else
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3b7 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
 endif
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_SEPARATED_DT := true
-
-BOARD_EGL_CFG := device/fairphone_devices/FP2/egl.cfg
 
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x01000000
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x01000000
@@ -104,15 +110,8 @@ TARGET_HW_DISK_ENCRYPTION := false
 # Workaround framework bluetooth dependency
 BOARD_HAVE_BLUETOOTH := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
-OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
-
-TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_msm
-
-TARGET_LDPRELOAD := libNimsWrap.so
 
 USE_OPENGL_RENDERER := true
-
 
 TW_THEME := portrait_hdpi
 TW_NO_USB_STORAGE := false
@@ -120,5 +119,24 @@ TW_TARGET_USES_QCOM_BSP := true
 TW_NO_EXFAT := true
 TW_NO_EXFAT_FUSE := true
 
-
 RECOVERY_GRAPHICS_USE_LINELENGTH := true
+
+# Wifi
+BOARD_HAS_QCOM_WLAN              := true
+BOARD_HAS_QCOM_WLAN_SDK          := true
+BOARD_WLAN_DEVICE                := qcwcn
+BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
+BOARD_HOSTAPD_DRIVER             := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_qcwcn
+WIFI_DRIVER_FW_PATH_STA          := "sta"
+WIFI_DRIVER_FW_PATH_AP           := "ap"
+WPA_SUPPLICANT_VERSION           := VER_0_8_X
+
+TARGET_RIL_VARIANT := caf
+
+# SELinux
+include device/qcom/sepolicy/sepolicy.mk
+
+BOARD_SEPOLICY_DIRS += \
+    device/fairphone/FP2/sepolicy
