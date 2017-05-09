@@ -62,15 +62,58 @@ on post-fs-data
     mkdir /tombstones/dsps 0771 system system
     mkdir /data/usf 0700 system system
 
+    mkdir /data/media 0770 media_rw media_rw
+
+    # NFC: create data/nfc for nv storage
+    mkdir /data/nfc 0770 nfc nfc
+    mkdir /data/nfc/param 0770 nfc nfc
+
+    # Create directory for TZ Apps
+    mkdir /data/misc/qsee 0770 system system
+
+    #  bluetooth
+    mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
+
+    # Create directory used by audio subsystem
+    mkdir /data/misc/audio 0770 audio audio
+
+    # Create directory used by sensor subsystem
+    mkdir /persist/sensors 0775 system root
+    write /persist/sensors/sensors_settings 1
+    chmod 0644 /persist/sensors/sensors_settings
+    chown system root /persist/sensors/sensors_settings
+    mkdir /data/misc/sensors 0775 system system
+    restorecon_recursive /data/misc/sensors
     # Create the directories used by the Wireless subsystem
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
 
+    # We chown/chmod /persist again so because mount is run as root + defaults
+    chown system system /persist
+    chmod 0771 /persist
+    
+    #Create directories for Location services
+    mkdir /data/misc/location 0770 gps gps
+    mkdir /data/misc/location/mq 0770 gps gps
+    mkdir /data/misc/location/xtwifi 0770 gps gps
+    mkdir /data/misc/location/gpsone_d 0770 system gps
+    mkdir /data/misc/location/quipc 0770 gps gps
+    mkdir /data/misc/location/gsiff 0770 gps gps
+    
     # Create the directories used by CnE subsystem
     mkdir /data/connectivity 0771 system system
     chown system system /data/connectivity
+    
+    #Create directory from IMS services
+    mkdir /data/shared 0755
+    chown system system /data/shared
 
+    # Create /data/time folder for time-services
+    mkdir /data/time/ 0700 system system
+
+    mkdir /data/audio/ 0770 media audio
+    
 on boot
     insmod /system/lib/modules/adsprpc.ko
 # access permission for secure touch
@@ -86,7 +129,7 @@ on boot
     chmod 0444 /persist/board_date.bin
     chown system root /persist/sns.reg
     chmod 770  /persist/sns.reg
-
+    
     #Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
@@ -97,6 +140,9 @@ on boot
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
 
+    #Create NETMGR daemon socket area
+    mkdir /dev/socket/netmgr 0750 radio radio
+    
 # Allow usb charging to be disabled persistently
 on property:persist.usb.chgdisabled=1
     write /sys/class/power_supply/battery/charging_enabled 0
@@ -329,7 +375,7 @@ service imsdatadaemon /system/bin/imsdatadaemon
 service wcnss-service /system/bin/wcnss_service
     class main
     user system
-    group system wifi radio
+    group system wifi qcom_diag diag radio
     oneshot
 
 on property:sys.ims.QMI_DAEMON_STATUS=1
@@ -386,3 +432,10 @@ service TCMDServer /system/bin/TCMDServer
     class main
     group root
     user root
+
+service ril-daemon1 /system/bin/rild -c 2
+    class main
+    socket rild2 stream 660 root radio
+    socket rild-debug2 stream 660 radio system
+    user root
+    group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log

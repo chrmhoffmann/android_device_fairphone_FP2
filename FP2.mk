@@ -21,6 +21,10 @@ PRODUCT_COPY_FILES += device/fairphone/FP2/media/media_profiles_8974.xml:system/
                       device/fairphone/FP2/media/media_codecs_8974.xml:system/etc/media_codecs.xml
 endif  #TARGET_ENABLE_QC_AV_ENHANCEMENTS
 
+# IPC router config
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/sec_config:system/etc/sec_config
+
 ifeq ($(PROPRIETARY_BLOBS_EXIST),true)
 PRODUCT_COPY_FILES += \
     device/fairphone/FP2/apns-conf.xml:system/etc/apns-conf.xml
