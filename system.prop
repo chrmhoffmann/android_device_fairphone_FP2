@@ -17,6 +17,7 @@ persist.rild.nitz_short_ons_3=
 DEVICE_PROVISIONED=1
 # Start in global mode
 ro.telephony.default_network=9
+telephony.lteOnGsmDevice=1
 
 debug.sf.hw=1
 debug.egl.hw=1
@@ -152,3 +153,26 @@ persist.sys.isUsbOtgEnabled=true
 ro.sf.lcd_density=480
 
 wifi.interface=wlan0
+
+media.stagefright.legacyencoder=true
+media.stagefright.less-secure=true
+
+# Bluetooth
+bluetooth.hfp.client=1
+qcom.bluetooth.soc=smd
+ro.bluetooth.hfp.ver=1.7
+ro.qualcomm.bt.hci_transport=smd
+
+ro.bluetooth.dun=false
+ro.bluetooth.sap=false
+ro.qualcomm.bluetooth.ftp=true
+ro.qualcomm.bluetooth.hfp=true
+ro.qualcomm.bluetooth.hsp=true
+ro.qualcomm.bluetooth.map=true
+ro.qualcomm.bluetooth.nap=true
+ro.qualcomm.bluetooth.opp=true
+ro.qualcomm.bluetooth.pbap=true
+
+# GPS
+persist.gps.qc_nlp_in_use=0
+ro.gps.agps_provider=1

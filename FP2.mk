@@ -4,26 +4,20 @@ endif
 
 DEVICE_PACKAGE_OVERLAYS += device/fairphone/FP2/overlay
 
-TARGET_USES_QCOM_BSP := false
-TARGET_USES_QCA_NFC := other
-
-ifeq ($(TARGET_USES_QCOM_BSP), true)
-# Add QC Video Enhancements flag
-TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
-endif #TARGET_USES_QCOM_BSP
-
-#TARGET_DISABLE_DASH := true
-#TARGET_DISABLE_OMX_SECURE_TEST_APP := true
-
 # media_profiles and media_codecs xmls for 8974
-ifeq ($(TARGET_ENABLE_QC_AV_ENHANCEMENTS), true)
+PRODUCT_COPY_FILES += \
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
+
 PRODUCT_COPY_FILES += device/fairphone/FP2/media/media_profiles_8974.xml:system/etc/media_profiles.xml \
-                      device/fairphone/FP2/media/media_codecs_8974.xml:system/etc/media_codecs.xml
-endif  #TARGET_ENABLE_QC_AV_ENHANCEMENTS
+                      device/fairphone/FP2/media/media_codecs_8974.xml:system/etc/media_codecs.xml \
+                      device/fairphone/FP2/media/media_codecs_performance.xml:system/etc/media_codecs_performance.xml
+
 
 # IPC router config
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/sec_config:system/etc/sec_config
+    device/fairphone/FP2/sec_config:system/etc/sec_config
 
 ifeq ($(PROPRIETARY_BLOBS_EXIST),true)
 PRODUCT_COPY_FILES += \
@@ -36,6 +30,16 @@ PRODUCT_BRAND := Fairphone
 PRODUCT_MANUFACTURER := Fairphone
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.google.clientidbase=android-fairphone
+
+# Audio
+PRODUCT_COPY_FILES += \
+    device/fairphone/FP2/acdbdata/MTP/MTP_Bluetooth_cal.acdb:system/etc/acdbdata/MTP/MTP_Bluetooth_cal.acdb \
+    device/fairphone/FP2/acdbdata/MTP/MTP_General_cal.acdb:system/etc/acdbdata/MTP/MTP_General_cal.acdb \
+    device/fairphone/FP2/acdbdata/MTP/MTP_Global_cal.acdb:system/etc/acdbdata/MTP/MTP_Global_cal.acdb \
+    device/fairphone/FP2/acdbdata/MTP/MTP_Handset_cal.acdb:system/etc/acdbdata/MTP/MTP_Handset_cal.acdb \
+    device/fairphone/FP2/acdbdata/MTP/MTP_Hdmi_cal.acdb:system/etc/acdbdata/MTP/MTP_Hdmi_cal.acdb \
+    device/fairphone/FP2/acdbdata/MTP/MTP_Headset_cal.acdb:system/etc/acdbdata/MTP/MTP_Headset_cal.acdb \
+    device/fairphone/FP2/acdbdata/MTP/MTP_Speaker_cal.acdb:system/etc/acdbdata/MTP/MTP_Speaker_cal.acdb
 
 # Audio configuration file
 PRODUCT_COPY_FILES += \
@@ -87,6 +91,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     librmnetctl
 
+# Dalvik/HWUI
+$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
+$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
+
 # Display
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
@@ -133,12 +141,23 @@ PRODUCT_PACKAGES += \
     init.target.rc \
     ueventd.qcom.rc
 
-#battery_monitor
+PRODUCT_PACKAGES += \
+    init.qcom.bt.sh
+
+# Thermal config
+PRODUCT_COPY_FILES += \
+    device/fairphone/FP2/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
+
+# Power
+PRODUCT_PACKAGES += \
+    power.msm8974
+
+# battery_monitor
 PRODUCT_PACKAGES += \
     battery_monitor \
     battery_shutdown
 
-#wlan driver
+# wlan driver
 PRODUCT_COPY_FILES += \
     device/fairphone/FP2/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
     device/fairphone/FP2/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
@@ -157,7 +176,7 @@ PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf \
     p2p_supplicant_overlay.conf
 
-#ANT stack
+# ANT stack
 PRODUCT_PACKAGES += \
         AntHalService \
         libantradio \
@@ -247,6 +266,25 @@ endif
 ifeq ($(strip $(FP2_SKIP_BOOT_JARS_CHECK)),)
 SKIP_BOOT_JARS_CHECK := true
 endif
+
+# Charger
+PRODUCT_PACKAGES += \
+    charger_res_images
+
+# Gello
+PRODUCT_PACKAGES += \
+    Gello
+
+# GPS
+PRODUCT_PACKAGES += \
+    gps.msm8974
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/gps/flp.conf:system/etc/flp.conf \
+    $(LOCAL_PATH)/gps/gps.conf:system/etc/gps.conf \
+    $(LOCAL_PATH)/gps/izat.conf:system/etc/izat.conf \
+    $(LOCAL_PATH)/gps/quipc.conf:system/etc/quipc.conf \
+    $(LOCAL_PATH)/gps/sap.conf:system/etc/sap.conf
 
 # we don't have the calibration data so don't generate persist.img
 FP2_SKIP_PERSIST_IMG := true

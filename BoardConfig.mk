@@ -18,6 +18,8 @@ AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := false
 USE_CUSTOM_AUDIO_POLICY := 1
 
 USE_CAMERA_STUB := false
+TARGET_HAS_LEGACY_CAMERA_HAL1 := true
+BOARD_USES_CYANOGEN_HARDWARE := true
 
 TARGET_KERNEL_CONFIG := fairphone-perf_defconfig
 TARGET_KERNEL_SOURCE := kernel/fairphone/msm8974
@@ -107,9 +109,14 @@ TARGET_USES_NEW_ION_API :=true
 
 TARGET_HW_DISK_ENCRYPTION := false
 
+# Bluetooth
 # Workaround framework bluetooth dependency
 BOARD_HAVE_BLUETOOTH := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/generic/common/bluetooth
+BOARD_HAVE_BLUETOOTH_QCOM := true
+BLUETOOTH_HCI_USE_MCT := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/fairphone/FP2/bluetooth
+QCOM_BT_USE_SMD_TTY := true
+FEATURE_QCRIL_UIM_SAP_SERVER_MODE := true
 
 USE_OPENGL_RENDERER := true
 
@@ -135,8 +142,22 @@ WPA_SUPPLICANT_VERSION           := VER_0_8_X
 
 TARGET_RIL_VARIANT := caf
 
+# GPS
+BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := true
+USE_DEVICE_SPECIFIC_GPS := true
+USE_DEVICE_SPECIFIC_LOC_API := true
+
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += \
     device/fairphone/FP2/sepolicy
+
+# CM Hardware
+BOARD_USES_CYANOGEN_HARDWARE := true
+BOARD_HARDWARE_CLASS += \
+    hardware/cyanogen/cmhw
+
+# QCOM Power
+TARGET_POWERHAL_VARIANT := qcom
+
