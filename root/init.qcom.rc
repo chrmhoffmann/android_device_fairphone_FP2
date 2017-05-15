@@ -118,7 +118,13 @@ on post-fs-data
     mkdir /data/time/ 0700 system system
 
     mkdir /data/audio/ 0770 media audio
-    
+
+    # Create folder for mm-qcamera-daemon
+    mkdir /data/camera 0770 media camera
+
+    # camera sockets
+    mkdir /data/misc/camera 0770 camera camera
+
 on boot
     # bluetooth
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
@@ -168,12 +174,12 @@ on boot
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
 
-    #Create NETMGR daemon socket area
+    # Create NETMGR daemon socket area
     mkdir /dev/socket/netmgr 0750 radio radio
 
     mkdir /persist/bluetooth 0770 bluetooth bluetooth
 
-#charger
+    # charger
     chown root system /sys/module/qpnp_charger/parameters/charger_monitor
     chown root system /sys/class/power_supply/battery/input_current_max
     chown root system /sys/class/power_supply/battery/input_current_trim
@@ -182,6 +188,11 @@ on boot
     chmod 0644 /sys/class/power_supply/battery/input_current_max
     chmod 0644 /sys/class/power_supply/battery/input_current_trim
     chmod 0644 /sys/class/power_supply/battery/voltage_min
+
+    # Camera Recording
+    mkdir /dev/video
+    symlink /dev/video32 /dev/video/venus_dec
+    symlink /dev/video33 /dev/video/venus_enc
     
 # Allow usb charging to be disabled persistently
 on property:persist.usb.chgdisabled=1
