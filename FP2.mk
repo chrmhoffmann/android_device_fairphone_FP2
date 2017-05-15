@@ -137,6 +137,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     fstab.qcom \
     init.qcom.rc \
+    init.qcom.power.rc \
     init.qcom.usb.rc \
     init.target.rc \
     ueventd.qcom.rc
@@ -271,10 +272,6 @@ endif
 PRODUCT_PACKAGES += \
     charger_res_images
 
-# Gello
-PRODUCT_PACKAGES += \
-    Gello
-
 # GPS
 PRODUCT_PACKAGES += \
     gps.msm8974
@@ -285,6 +282,23 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gps/izat.conf:system/etc/izat.conf \
     $(LOCAL_PATH)/gps/quipc.conf:system/etc/quipc.conf \
     $(LOCAL_PATH)/gps/sap.conf:system/etc/sap.conf
+
+# Lights
+PRODUCT_PACKAGES += \
+    lights.msm8974
+
+# Keystore
+PRODUCT_PACKAGES += \
+    keystore.msm8974
+
+# FM radio
+PRODUCT_PACKAGES += \
+    FM2 \
+    qcom.fmradio
+
+# Camera
+PRODUCT_PACKAGES += \
+    Snap
 
 # we don't have the calibration data so don't generate persist.img
 FP2_SKIP_PERSIST_IMG := true
