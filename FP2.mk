@@ -265,10 +265,6 @@ ifeq ($(strip $(FP2_SKIP_BOOT_JARS_CHECK)),)
 SKIP_BOOT_JARS_CHECK := true
 endif
 
-# Charger
-PRODUCT_PACKAGES += \
-    charger_res_images
-
 # GPS
 PRODUCT_PACKAGES += \
     gps.msm8974
