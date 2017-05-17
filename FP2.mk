@@ -1,60 +1,59 @@
-ifneq ($(QCPATH),)
-$(call inherit-product-if-exists, $(QCPATH)/common/config/device-vendor.mk)
-endif
+#
+# Copyright (C) 2017 The LineageOS Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
-DEVICE_PACKAGE_OVERLAYS += device/fairphone/FP2/overlay
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
-# media_profiles and media_codecs xmls for 8974
+# Media
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
 
-PRODUCT_COPY_FILES += device/fairphone/FP2/media/media_profiles_8974.xml:system/etc/media_profiles.xml \
-                      device/fairphone/FP2/media/media_codecs_8974.xml:system/etc/media_codecs.xml \
-                      device/fairphone/FP2/media/media_codecs_performance.xml:system/etc/media_codecs_performance.xml
-
-
-# IPC router config
 PRODUCT_COPY_FILES += \
-    device/fairphone/FP2/sec_config:system/etc/sec_config
+    $(LOCAL_PATH)/media/media_codecs_8974.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/media/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
+    $(LOCAL_PATH)/media/media_profiles_8974.xml:system/etc/media_profiles.xml
 
-ifeq ($(PROPRIETARY_BLOBS_EXIST),true)
+# IPC router
 PRODUCT_COPY_FILES += \
-    device/fairphone/FP2/apns-conf.xml:system/etc/apns-conf.xml
-endif
-
-PRODUCT_NAME := FP2
-PRODUCT_DEVICE := FP2
-PRODUCT_BRAND := Fairphone
-PRODUCT_MANUFACTURER := Fairphone
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.com.google.clientidbase=android-fairphone
+    $(LOCAL_PATH)/configs/sec_config:system/etc/sec_config
 
 # Audio
 PRODUCT_COPY_FILES += \
-    device/fairphone/FP2/acdbdata/MTP/MTP_Bluetooth_cal.acdb:system/etc/acdbdata/MTP/MTP_Bluetooth_cal.acdb \
-    device/fairphone/FP2/acdbdata/MTP/MTP_General_cal.acdb:system/etc/acdbdata/MTP/MTP_General_cal.acdb \
-    device/fairphone/FP2/acdbdata/MTP/MTP_Global_cal.acdb:system/etc/acdbdata/MTP/MTP_Global_cal.acdb \
-    device/fairphone/FP2/acdbdata/MTP/MTP_Handset_cal.acdb:system/etc/acdbdata/MTP/MTP_Handset_cal.acdb \
-    device/fairphone/FP2/acdbdata/MTP/MTP_Hdmi_cal.acdb:system/etc/acdbdata/MTP/MTP_Hdmi_cal.acdb \
-    device/fairphone/FP2/acdbdata/MTP/MTP_Headset_cal.acdb:system/etc/acdbdata/MTP/MTP_Headset_cal.acdb \
-    device/fairphone/FP2/acdbdata/MTP/MTP_Speaker_cal.acdb:system/etc/acdbdata/MTP/MTP_Speaker_cal.acdb
+    $(LOCAL_PATH)/audio/acdbdata/MTP/MTP_Bluetooth_cal.acdb:system/etc/acdbdata/MTP/MTP_Bluetooth_cal.acdb \
+    $(LOCAL_PATH)/audio/acdbdata/MTP/MTP_General_cal.acdb:system/etc/acdbdata/MTP/MTP_General_cal.acdb \
+    $(LOCAL_PATH)/audio/acdbdata/MTP/MTP_Global_cal.acdb:system/etc/acdbdata/MTP/MTP_Global_cal.acdb \
+    $(LOCAL_PATH)/audio/acdbdata/MTP/MTP_Handset_cal.acdb:system/etc/acdbdata/MTP/MTP_Handset_cal.acdb \
+    $(LOCAL_PATH)/audio/acdbdata/MTP/MTP_Hdmi_cal.acdb:system/etc/acdbdata/MTP/MTP_Hdmi_cal.acdb \
+    $(LOCAL_PATH)/audio/acdbdata/MTP/MTP_Headset_cal.acdb:system/etc/acdbdata/MTP/MTP_Headset_cal.acdb \
+    $(LOCAL_PATH)/audio/acdbdata/MTP/MTP_Speaker_cal.acdb:system/etc/acdbdata/MTP/MTP_Speaker_cal.acdb
 
-# Audio configuration file
 PRODUCT_COPY_FILES += \
-    device/fairphone/FP2/audio_policy.conf:system/etc/audio_policy.conf \
-    device/fairphone/FP2/audio_effects.conf:system/vendor/etc/audio_effects.conf \
-    device/fairphone/FP2/mixer_paths.xml:system/etc/mixer_paths.xml \
-    device/fairphone/FP2/mixer_paths_auxpcm.xml:system/etc/mixer_paths_auxpcm.xml
+    $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
+    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
+    $(LOCAL_PATH)/audio/mixer_paths_auxpcm.xml:system/etc/mixer_paths_auxpcm.xml
 
 PRODUCT_PACKAGES += \
-    audiod \
     audio.a2dp.default \
-    audio_policy.msm8974 \
     audio.primary.msm8974 \
     audio.r_submix.default \
     audio.usb.default \
+    audio_policy.msm8974 \
+    audiod \
     libqcompostprocbundle \
     libqcomvisualizer \
     libqcomvoiceprocessing \
@@ -67,8 +66,6 @@ TARGET_SCREEN_WIDTH := 1080
 
 # Media
 PRODUCT_PACKAGES += \
-    libc2dcolorconvert \
-    libdivxdrmdecrypt \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxCore \
@@ -76,6 +73,8 @@ PRODUCT_PACKAGES += \
     libOmxQcelp13Enc \
     libOmxVdec \
     libOmxVenc \
+    libc2dcolorconvert \
+    libdivxdrmdecrypt \
     libstagefrighthw
 
 PRODUCT_PACKAGES += \
@@ -104,10 +103,10 @@ PRODUCT_PACKAGES += \
     copybit.msm8974 \
     gralloc.msm8974 \
     hwcomposer.msm8974 \
-    memtrack.msm8974 \
-    liboverlay
+    liboverlay \
+    memtrack.msm8974
 
-# Feature definition files
+# Features
 PRODUCT_COPY_FILES += \
     external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:system/etc/permissions/com.dsi.ant.antradio_library.xml \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
@@ -136,8 +135,8 @@ PRODUCT_COPY_FILES += \
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.qcom.rc \
     init.qcom.power.rc \
+    init.qcom.rc \
     init.qcom.usb.rc \
     init.target.rc \
     ueventd.qcom.rc
@@ -145,24 +144,28 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     init.qcom.bt.sh
 
-# Thermal config
+# Thermal
 PRODUCT_COPY_FILES += \
-    device/fairphone/FP2/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
+    $(LOCAL_PATH)/thermal-engine-8974.conf:system/etc/thermal-engine-8974.conf
 
 # Power
 PRODUCT_PACKAGES += \
     power.msm8974
 
-# battery_monitor
+# Battery_monitor
 PRODUCT_PACKAGES += \
     battery_monitor \
     battery_shutdown
 
-# wlan driver
+# Input device files
 PRODUCT_COPY_FILES += \
-    device/fairphone/FP2/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-    device/fairphone/FP2/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
-    device/fairphone/FP2/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
+    $(LOCAL_PATH)/configs/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl
+
+# Wifi
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 
 PRODUCT_PACKAGES += \
     hostapd \
@@ -170,100 +173,29 @@ PRODUCT_PACKAGES += \
     wpa_supplicant
 
 PRODUCT_PACKAGES += \
-    hostapd_default.conf \
     hostapd.accept \
     hostapd.deny \
+    hostapd_default.conf \
+    p2p_supplicant_overlay.conf \
     wpa_supplicant.conf \
-    wpa_supplicant_overlay.conf \
-    p2p_supplicant_overlay.conf
+    wpa_supplicant_overlay.conf
+
+PRODUCT_MODEL := FP2
+PRODUCT_NAME := FP2
+PRODUCT_DEVICE := FP2
+PRODUCT_BRAND := Fairphone
+PRODUCT_MANUFACTURER := Fairphone
+TARGET_RELEASETOOLS_EXTENSIONS := device/fairphone/FP2
 
 # ANT stack
 PRODUCT_PACKAGES += \
-        AntHalService \
-        libantradio \
-        ANTRadioService \
-        antradio_app
-
-TARGET_RELEASETOOLS_EXTENSIONS := device/fairphone/FP2
-ADD_RADIO_FILES := true
-
-# Enable strict operation
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.strict_op_enable=false \
-    persist.sys.usb.config=mtp
-
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.whitelist=/system/etc/whitelist_appops.xml
-
-PRODUCT_COPY_FILES += \
-    device/fairphone/FP2/whitelist_appops.xml:system/etc/whitelist_appops.xml
-
-
-# NFC packages
-ifeq ($(TARGET_USES_QCA_NFC),true)
-NFC_D := true
-
-ifeq ($(NFC_D), true)
-    PRODUCT_PACKAGES += \
-        libnfcD-nci \
-        libnfcD_nci_jni \
-        nfc_nci.msm8974 \
-        NfcDNci \
-        Tag \
-        com.android.nfc_extras \
-        com.android.nfc.helper
-else
-PRODUCT_PACKAGES += \
-    libnfc-nci \
-    libnfc_nci_jni \
-    nfc_nci.msm8974 \
-    NfcNci \
-    Tag \
-    com.android.nfc_extras
-endif
-
-# file that declares the MIFARE NFC constant
-# Commands to migrate prefs from com.android.nfc3 to com.android.nfc
-# NFC access control + feature files + configuration
-PRODUCT_COPY_FILES += \
-        frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
-        frameworks/native/data/etc/com.android.nfc_extras.xml:system/etc/permissions/com.android.nfc_extras.xml \
-        frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml
-# Enable NFC Forum testing by temporarily changing the PRODUCT_BOOT_JARS
-# line has to be in sync with build/target/product/core_base.mk
-endif
-
-PRODUCT_BOOT_JARS += qcmediaplayer \
-                     org.codeaurora.Performance \
-                     vcard \
-                     tcmiface
-ifneq ($(strip $(QCPATH)),)
-PRODUCT_BOOT_JARS += WfdCommon
-PRODUCT_BOOT_JARS += qcom.fmradio
-PRODUCT_BOOT_JARS += security-bridge
-PRODUCT_BOOT_JARS += qsb-port
-PRODUCT_BOOT_JARS += oem-services
-endif
-
-PRODUCT_COPY_FILES += device/fairphone/FP2/twrp.fstab:recovery/root/etc/twrp.fstab
-
-PRODUCT_MODEL := FP2
+   ANTRadioService \
+   AntHalService \
+   antradio_app \
+   libantradio
 
 # include an expanded selection of fonts for the SDK.
 EXTENDED_FONT_FOOTPRINT := true
-
-# Preferred Applications for Fairphone
-PRODUCT_COPY_FILES += \
-    device/fairphone/FP2/preferred.xml:system/etc/preferred-apps/fp.xml
-
-# remove /dev/diag in user version for CTS
-ifeq ($(TARGET_BUILD_VARIANT),user)
-PRODUCT_COPY_FILES += device/qcom/common/rootdir/etc/init.qcom.diag.rc.user:root/init.qcom.diag.rc
-endif
-
-ifeq ($(strip $(FP2_SKIP_BOOT_JARS_CHECK)),)
-SKIP_BOOT_JARS_CHECK := true
-endif
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -292,9 +224,6 @@ PRODUCT_PACKAGES += \
 # Camera
 PRODUCT_PACKAGES += \
     Snap
-
-# we don't have the calibration data so don't generate persist.img
-FP2_SKIP_PERSIST_IMG := true
 
 # Call the proprietary setup
 $(call inherit-product, vendor/fairphone/FP2/FP2-vendor.mk)
