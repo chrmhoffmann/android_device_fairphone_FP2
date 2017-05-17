@@ -180,13 +180,6 @@ PRODUCT_PACKAGES += \
     wpa_supplicant.conf \
     wpa_supplicant_overlay.conf
 
-PRODUCT_MODEL := FP2
-PRODUCT_NAME := FP2
-PRODUCT_DEVICE := FP2
-PRODUCT_BRAND := Fairphone
-PRODUCT_MANUFACTURER := Fairphone
-TARGET_RELEASETOOLS_EXTENSIONS := device/fairphone/FP2
-
 # ANT stack
 PRODUCT_PACKAGES += \
    ANTRadioService \
