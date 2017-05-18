@@ -148,6 +148,7 @@ BOARD_SEPOLICY_DIRS += \
 BOARD_USES_CYANOGEN_HARDWARE := true
 BOARD_HARDWARE_CLASS += \
     hardware/cyanogen/cmhw
+BACKLIGHT_PATH=/sys/class/leds/lcd-backlight/brightness
 
 # QCOM Power
 TARGET_POWERHAL_VARIANT := qcom
