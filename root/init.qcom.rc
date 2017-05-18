@@ -149,8 +149,7 @@ on boot
     chmod 0660 /dev/ttyHS2
     chown bluetooth bluetooth /dev/ttyHS2
 
-    insmod /system/lib/modules/adsprpc.ko
-# access permission for secure touch
+    # access permission for secure touch
     chmod 0660 /sys/devices/f9923000.i2c/i2c-1/1-004a/secure_touch_enable
     chmod 0440 /sys/devices/f9923000.i2c/i2c-1/1-004a/secure_touch
     chown system drmrpc /sys/devices/f9923000.i2c/i2c-1/1-004a/secure_touch_enable
@@ -164,7 +163,7 @@ on boot
     chown system root /persist/sns.reg
     chmod 770  /persist/sns.reg
     
-    #Create QMUX deamon socket area
+    # Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
     mkdir /dev/socket/qmux_audio 0770 media audio
@@ -179,7 +178,7 @@ on boot
 
     mkdir /persist/bluetooth 0770 bluetooth bluetooth
 
-    # charger
+    # Charger
     chown root system /sys/module/qpnp_charger/parameters/charger_monitor
     chown root system /sys/class/power_supply/battery/input_current_max
     chown root system /sys/class/power_supply/battery/input_current_trim
@@ -217,25 +216,6 @@ service qcamerasvr /system/bin/mm-qcamera-daemon
     class late_start
     user camera
     group camera system inet input graphics
-
-#start gesture server as daemon
-#there are not mm-gesture-dameno,qrngp and qrngp in FP2, so remove them.
-#service qgesturesvr /system/bin/mm-gesture-daemon
-#    class late_start
-#    user system
-#    group system camera input graphics net_bt_stack
-#
-#service qrngd /system/bin/qrngd -f
-#    class main
-#    user root
-#    group root
-#
-#service qrngp /system/bin/qrngp
-#    class main
-#    user root
-#    group root
-#    oneshot
-#    disabled
 
 on property:sys.boot_completed=1
     start qrngp
@@ -347,58 +327,6 @@ service audiod /system/bin/audiod
    user system
    group system
 
-service usf_tester /system/bin/usf_tester
-    user system
-    group system inet
-    disabled
-
-service usf_epos /system/bin/usf_epos
-    class main
-    user system
-    group system inet
-    disabled
-
-service usf_gesture /system/bin/usf_gesture
-    user system
-    group system inet
-    disabled
-
-service usf_sync_gesture /system/bin/usf_sync_gesture
-    user system
-    group system inet
-    disabled
-
-service usf_p2p /system/bin/usf_p2p
-    user system
-    group system inet
-    disabled
-
-service usf_hovering /system/bin/usf_hovering
-    user system
-    group system inet
-    disabled
-
-service usf_proximity /system/bin/usf_proximity
-    user system
-    group system inet
-    disabled
-
-service usf_pairing /system/bin/usf_pairing
-    user system
-    group system inet
-    disabled
-
-service usf_sw_calib /system/bin/usf_sw_calib
-    user system
-    group system inet
-    disabled
-
-service usf-post-boot /system/bin/sh /system/etc/usf_post_boot.sh
-    class late_start
-    user root
-    disabled
-    oneshot
-
 on property:init.svc.bootanim=stopped
     start usf-post-boot
 
@@ -453,23 +381,6 @@ on property:init.svc.surfaceflinger=stopped
 
 on property:init.svc.surfaceflinger=running
     start ppd
-
-#there are not nqs, pfm, ml_daemon in FP2, so remove them
-#service nqs /system/bin/nqs
-#    class late_start
-#    socket nqs_qsb_comm stream 660 system system
-#    user system
-#    group drmrpc
-#
-#service pfm /system/bin/pfm
-#    class late_start
-#    user system
-#    group system drmrpc mount
-#
-#service ml_daemon /system/bin/ml_daemon
-#    class core
-#    user root
-#    group root
 
 service TCMDServer /system/bin/TCMDServer
     class main
