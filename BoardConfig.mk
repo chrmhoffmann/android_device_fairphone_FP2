@@ -39,7 +39,6 @@ BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user
 else
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3b7 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
 endif
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_SEPARATED_DT := true
 
 # Architecture
