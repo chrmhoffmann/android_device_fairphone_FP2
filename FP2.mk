@@ -212,8 +212,8 @@ PRODUCT_PACKAGES += \
 # FM radio
 PRODUCT_PACKAGES += \
     FM2 \
-    qcom.fmradio
-
+    qcom.fmradio \
+    init.qcom.fm.sh
 # Camera
 PRODUCT_PACKAGES += \
     Snap

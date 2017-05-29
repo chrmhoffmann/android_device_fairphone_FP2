@@ -156,6 +156,7 @@ TARGET_POWERHAL_VARIANT := qcom
 AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
 BOARD_HAVE_QCOM_FM := true
 TARGET_FM_LEGACY_PATCHLOADER := true
+KERNEL_HAS_FINIT_MODULE := false
 
 -include vendor/fairphone/FP2/BoardConfigVendor.mk
 
