@@ -402,6 +402,10 @@ service ril-daemon1 /system/bin/rild -c 2
     user root
     group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
 
+on property:vold.decrypt=trigger_restart_framework
+    start config_bt_addr
+    start wcnss-service
+
 service config_bt_addr /system/bin/btnvtool -O
     class core
     user bluetooth
